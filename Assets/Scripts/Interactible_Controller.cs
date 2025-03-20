@@ -4,20 +4,47 @@ using UnityEngine;
 
 public class Interactible_Controller : MonoBehaviour
 {
-    public GameObject currentInteractible = null;  
-
-    private void OnTriggerStay2D(Collider2D other)
+    public InteractibleType interactibleType;
+    public enum InteractibleType
     {
-        if (other.gameObject.tag == "Interactible")
+        Default,
+        pickUp,
+        Info,
+        Dialogue
+    }
+    public void Interact(){
+        switch (interactibleType)
         {
-            currentInteractible = other.gameObject;
+            case InteractibleType.Default:
+                Default();
+                break;
+            case InteractibleType.pickUp:
+                PickUp();
+                break;
+            case InteractibleType.Info:
+                Info();
+                break;
+            case InteractibleType.Dialogue:
+                Dialogue();
+                break;
         }
     }
-    private void OnTriggerExit2D(Collider2D other)
+    private void Default()
     {
-        if (other.gameObject.tag == "Interactible")
-        {
-            currentInteractible = null;
-        }
+        Debug.Log($"Interacting with default {gameObject.name}");
+    }
+    private void PickUp()
+    {
+        Debug.Log($"Picking up {gameObject.name}");
+        // A collectible object that is added to the player's inventory and disappears from the game world (e.g., key, coin, sword).
+    }
+    private void Info()
+    {
+        Debug.Log($"Getting info from {gameObject.name}");
+        // Displays UI text above the player when interacted with, representing the player's inner thoughts about an object. The text disappears after a set amount of time.
+    }
+    private void Dialogue()
+    {
+        Debug.Log($"Talking to {gameObject.name}");
     }
 }
