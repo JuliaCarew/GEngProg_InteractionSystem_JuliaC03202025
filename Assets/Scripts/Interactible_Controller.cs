@@ -1,9 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Interactible_Controller : MonoBehaviour
 {
+    private PlayerInventory playerInventory;
+
+    public GameObject infoObj;
+    public GameObject dialogueObj;
+    public GameObject player;
+
+    public TextMeshProUGUI infoText;
+    public TextMeshProUGUI dialogueText;
+
+    string infoString = "INFO";
+    string dialogueString = "DIALOGUE";
+
     public InteractibleType interactibleType;
     public enum InteractibleType
     {
@@ -22,10 +35,10 @@ public class Interactible_Controller : MonoBehaviour
                 PickUp();
                 break;
             case InteractibleType.Info:
-                Info();
+                StartCoroutine(DisplayInfoText());
                 break;
             case InteractibleType.Dialogue:
-                Dialogue();
+                StartCoroutine(DisplayDialogue());
                 break;
         }
     }
@@ -33,18 +46,35 @@ public class Interactible_Controller : MonoBehaviour
     {
         Debug.Log($"Interacting with default {gameObject.name}");
     }
-    private void PickUp()
+    private void PickUp() // add item to player Inventory
     {
         Debug.Log($"Picking up {gameObject.name}");
-        // A collectible object that is added to the player's inventory and disappears from the game world (e.g., key, coin, sword).
+        this.gameObject.SetActive(false);
+        //playerInventory.inventory.Add(this.gameObject); // not working right now
+        Debug.Log($"{gameObject.name} added to inventory");
     }
-    private void Info()
+
+    // Info next to player's head, for inner thoughts in info on objects
+    IEnumerator DisplayInfoText()
     {
-        Debug.Log($"Getting info from {gameObject.name}");
-        // Displays UI text above the player when interacted with, representing the player's inner thoughts about an object. The text disappears after a set amount of time.
+        Debug.Log("Started DisplayInfoText Coroutine");
+
+        infoObj.SetActive(true);
+        infoText.text = infoString;
+
+        yield return new WaitForSeconds(5);
+        infoObj.SetActive(false);
     }
-    private void Dialogue()
+
+    // Text above player's head, for dialogue with NPCs & player
+    IEnumerator DisplayDialogue()
     {
-        Debug.Log($"Talking to {gameObject.name}");
+        Debug.Log("Started DisplayDialogue Coroutine");
+
+        dialogueObj.SetActive(true);
+        dialogueText.text = dialogueString;
+
+        yield return new WaitForSeconds(2);
+        dialogueObj.SetActive(false);
     }
 }
