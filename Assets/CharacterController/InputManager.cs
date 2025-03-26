@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 {
     private GameInput gameInput;
+    private DialogueManager dialogueManager;
 
     void Awake()
     {
@@ -21,6 +22,18 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
             //Debug.Log("Move input recieving: " + context.ReadValue<Vector2>());
             InputActions.MoveEvent?.Invoke(context.ReadValue<Vector2>());
         }
+    }
+
+    public void FreezeInput(bool isInDialogue)
+    {
+        // if player is currently in dialogue, freeze input
+        if (isInDialogue)
+        {
+            // freeze input 
+            Debug.Log("trying to move while in dialogue");
+        }
+        // normal input
+        Debug.Log("moving while out of dialogue");
     }
 
     public void OnInteraction(InputAction.CallbackContext context) // spacebar input, cancelled for bomb flass on space hold/release change colors
@@ -42,5 +55,6 @@ public static class InputActions // can expand to add more actions for the playe
 {
     public static Action<Vector2> MoveEvent;    
     public static Action InteractEvent; 
-    public static Action InteractEventCancelled;    
+    public static Action InteractEventCancelled;
+    public static Action dialogueEvent;
 }

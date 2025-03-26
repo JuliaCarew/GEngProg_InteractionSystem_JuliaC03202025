@@ -6,6 +6,7 @@ using UnityEngine;
 public class Interactible_Controller : MonoBehaviour
 {
     private PlayerInventory playerInventory;
+    private DialogueManager dialogueManager;
 
     public GameObject infoObj;
     public GameObject dialogueObj;
@@ -14,8 +15,16 @@ public class Interactible_Controller : MonoBehaviour
     public TextMeshProUGUI infoText;
     public TextMeshProUGUI dialogueText;
 
+    //[Header]
     string infoString = "INFO";
-    string dialogueString = "DIALOGUE";
+    //string dialogueString = "DIALOGUE";
+    [TextArea]
+    public string[] sentences;
+
+    private void Awake()
+    {
+        dialogueManager = GetComponent<DialogueManager>();
+    }
 
     public InteractibleType interactibleType;
     public enum InteractibleType
@@ -38,7 +47,7 @@ public class Interactible_Controller : MonoBehaviour
                 StartCoroutine(DisplayInfoText());
                 break;
             case InteractibleType.Dialogue:
-                StartCoroutine(DisplayDialogue());
+                Dialogue();
                 break;
         }
     }
@@ -66,15 +75,8 @@ public class Interactible_Controller : MonoBehaviour
         infoObj.SetActive(false);
     }
 
-    // Text above player's head, for dialogue with NPCs & player
-    IEnumerator DisplayDialogue()
+    private void Dialogue()
     {
-        Debug.Log("Started DisplayDialogue Coroutine");
-
-        dialogueObj.SetActive(true);
-        dialogueText.text = dialogueString;
-
-        yield return new WaitForSeconds(2);
-        dialogueObj.SetActive(false);
+        dialogueManager.StartDialogue(sentences);
     }
 }
