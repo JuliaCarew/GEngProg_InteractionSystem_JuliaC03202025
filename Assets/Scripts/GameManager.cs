@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public GameStateManager gameStateManager;
     public UIManager uiManager;
     public DialogueManager dialogueManager;
+    public Interactible_Controller interactibleController;
+    public PlayerInventory playerInventory;
 
     private void Awake()
     {
@@ -31,19 +33,4 @@ public class GameManager : MonoBehaviour
             uiManager = FindObjectOfType<UIManager>();
         }
     }
-    /*
-    private void Awake()
-    {
-
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
-    */
 }

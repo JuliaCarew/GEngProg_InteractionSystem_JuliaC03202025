@@ -17,6 +17,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI infoText;
     string infoString = "INFO";
 
+    // Pick up interactible
+    public GameObject pickUpObj;
+    public TextMeshProUGUI pickUpText;
+
     public void DisplayMainMenuUI()
     {
         ClearUI();
@@ -56,4 +60,14 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(5);
         infoObj.SetActive(false);
     }
+    public IEnumerator DisplayPickUpText(string text)
+    {
+        Debug.Log("Started DisplayPickUpText Coroutine");
+
+        pickUpObj.SetActive(true);
+        pickUpText.text = text;
+
+        yield return new WaitForSeconds(5);
+        pickUpObj.SetActive(false);
+    }   
 }
