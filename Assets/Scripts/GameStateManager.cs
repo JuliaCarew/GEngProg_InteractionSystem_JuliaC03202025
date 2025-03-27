@@ -25,8 +25,8 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         // Set the initial state of the game to Main Menu when the game starts
-        ChangeState(GameState.MainMenu_State);
-        MainMenuState();
+        ChangeState(GameState.Gameplay_State);
+        GameplayState();
     }
     
     public void ChangeState(GameState newState) // Method to change the current game state

@@ -5,25 +5,18 @@ using UnityEngine;
 
 public class Interactible_Controller : MonoBehaviour
 {
-    private PlayerInventory playerInventory;
+    public GameManager gameManager;
     private DialogueManager dialogueManager;
 
-    public GameObject infoObj;
-    public GameObject dialogueObj;
-    public GameObject player;
-
-    public TextMeshProUGUI infoText;
-    public TextMeshProUGUI dialogueText;
-
     //[Header]
-    string infoString = "INFO";
     //string dialogueString = "DIALOGUE";
     [TextArea]
     public string[] sentences;
 
     private void Awake()
     {
-        dialogueManager = GetComponent<DialogueManager>();
+        gameManager = GameManager.Instance;
+        dialogueManager = GameManager.Instance.dialogueManager;
     }
 
     public InteractibleType interactibleType;
@@ -44,7 +37,7 @@ public class Interactible_Controller : MonoBehaviour
                 PickUp();
                 break;
             case InteractibleType.Info:
-                StartCoroutine(DisplayInfoText());
+                Info();
                 break;
             case InteractibleType.Dialogue:
                 Dialogue();
@@ -64,15 +57,9 @@ public class Interactible_Controller : MonoBehaviour
     }
 
     // Info next to player's head, for inner thoughts in info on objects
-    IEnumerator DisplayInfoText()
+    void Info()
     {
-        Debug.Log("Started DisplayInfoText Coroutine");
-
-        infoObj.SetActive(true);
-        infoText.text = infoString;
-
-        yield return new WaitForSeconds(5);
-        infoObj.SetActive(false);
+        StartCoroutine(gameManager.uiManager.DisplayInfoText());
     }
 
     private void Dialogue()

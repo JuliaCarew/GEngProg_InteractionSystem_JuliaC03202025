@@ -12,6 +12,11 @@ public class UIManager : MonoBehaviour
     public GameObject pausedUI;
     public GameObject optionsUI;
 
+    // Info interactible
+    public GameObject infoObj;
+    public TextMeshProUGUI infoText;
+    string infoString = "INFO";
+
     public void DisplayMainMenuUI()
     {
         ClearUI();
@@ -39,5 +44,16 @@ public class UIManager : MonoBehaviour
         if (gameplayUI != null) gameplayUI.SetActive(false);
         if (pausedUI != null) pausedUI.SetActive(false);
         if (optionsUI != null) optionsUI.SetActive(false);
+    }
+
+    public IEnumerator DisplayInfoText()
+    {
+        Debug.Log("Started DisplayInfoText Coroutine");
+
+        infoObj.SetActive(true);
+        infoText.text = infoString;
+
+        yield return new WaitForSeconds(5);
+        infoObj.SetActive(false);
     }
 }

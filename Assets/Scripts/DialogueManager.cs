@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
-    public InputManager inputManager;
+    public GameManager gameManager;
+    private PlayerMovement playerMovement;
 
     public GameObject dialogueBox;
     public TextMeshProUGUI dialogueText;
@@ -17,6 +18,9 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
+        gameManager = GameManager.Instance;
+        playerMovement = GameManager.Instance.playerMovement;
+
         dialogue = new Queue<string>();
         dialogueBox.SetActive(false);
     }
@@ -38,7 +42,7 @@ public class DialogueManager : MonoBehaviour
     public void NextDialogue()
     {
         inDialogue = true;
-        inputManager.FreezeInput(true);
+        playerMovement.SetCanMove(false);
 
         if (dialogue.Count == 0) EndDialogue();
 
@@ -53,7 +57,7 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueBox.SetActive(false);
         inDialogue = false;
-        inputManager.FreezeInput(false);
+        playerMovement.SetCanMove(true);
     }
 }
 // stop input during dialogue (&anim)

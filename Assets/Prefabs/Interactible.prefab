@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5950010844519897521}
   - component: {fileID: 712796652954764635}
-  - component: {fileID: 9131832289754043389}
   - component: {fileID: 8312010268214014535}
   - component: {fileID: 7462176900670957074}
   m_Layer: 0
@@ -54,19 +53,6 @@ MonoBehaviour:
   dialogueText: {fileID: 0}
   sentences: []
   interactibleType: 0
---- !u!114 &9131832289754043389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4016434312510585297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816eaacd4a6a7ff418c796a5f60a01d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueBox: {fileID: 0}
 --- !u!212 &8312010268214014535
 SpriteRenderer:
   m_ObjectHideFlags: 0

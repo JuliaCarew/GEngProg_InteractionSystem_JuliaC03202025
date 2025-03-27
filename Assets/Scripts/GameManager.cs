@@ -6,9 +6,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public LevelManager levelManager;
-    public PlayerMovement player;
+    public PlayerMovement playerMovement;
     public GameStateManager gameStateManager;
     public UIManager uiManager;
+    public DialogueManager dialogueManager;
 
     private void Awake()
     {
