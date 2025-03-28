@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public DialogueManager dialogueManager;
     public Interactible_Controller interactibleController;
     public PlayerInventory playerInventory;
+    public QuestManager questManager;
 
     private void Awake()
     {

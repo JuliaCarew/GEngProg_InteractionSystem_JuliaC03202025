@@ -25,8 +25,8 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         // Set the initial state of the game to Main Menu when the game starts
-        ChangeState(GameState.Gameplay_State);
-        GameplayState();
+        ChangeState(GameState.MainMenu_State);
+        MainMenuState();
     }
     
     public void ChangeState(GameState newState) // Method to change the current game state
@@ -43,12 +43,10 @@ public class GameStateManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) 
             && currentState == GameState.Gameplay_State)
         {
-            Debug.Log("Switched to pause State");
             PauseState();
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && currentState == GameState.Paused_State)
         {
-            Debug.Log("Switched to gameplay State");
             GameplayState();
         }
     }
@@ -92,18 +90,22 @@ public class GameStateManager : MonoBehaviour
     public void MainMenuState()
     {
         ChangeState(GameState.MainMenu_State);
+        Debug.Log("GState Manager: MainMenuState");
     }
     public void GameplayState()
     {
         ChangeState(GameState.Gameplay_State);
+        Debug.Log("GState Manager: GameplayState");
     }
     public void PauseState()
     { 
         ChangeState(GameState.Paused_State);
+        Debug.Log("GState Manager: PauseState");
     }
     public void OptionsState()
     { 
         ChangeState(GameState.Options_State);
+        Debug.Log("GState Manager: OptionsState");
     }
     public void Quit()
     {

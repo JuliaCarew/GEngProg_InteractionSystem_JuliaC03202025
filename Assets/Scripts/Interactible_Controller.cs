@@ -7,11 +7,19 @@ public class Interactible_Controller : MonoBehaviour
 {
     public GameManager gameManager;
     private DialogueManager dialogueManager;
+    private QuestManager questManager;
+
+    // IMPORTANT: when adding new item, make sure to name it in all LOWER CASE, otherwise it will not be found in the inventory
+    [System.Serializable] // allows for the creation of a new class in the inspector
+    public class DialogueCondition{
+        public string requiredItemName; // name of the item required to trigger the dialogue
+        [TextArea]
+        public string[] conditionalDialogue; // dialogue that is triggered if the player has the item
+    }
 
     [TextArea]
-    public string[] sentences;
-    [TextArea]
-    public string[] shrubberyEvent; // unique dialogue if the player has picked up a shrubbery
+    public string[] defaultDialogue;
+    public List<DialogueCondition> dialogueConditions = new List<DialogueCondition>(); // list of all dialogue conditions( useful if this item has miltiple dialogue options)
 
     public InteractibleType interactibleType;
     public enum InteractibleType // sets the type of interaction for the object, swap between them in the inspector drop-down
@@ -22,27 +30,12 @@ public class Interactible_Controller : MonoBehaviour
         Dialogue
     }
 
-    public bool hasShrubbery = false;
-
     void Start()
     {
-        gameManager = GameManager.Instance;
-        if (gameManager == null)
-        {
-            gameManager = FindObjectOfType<GameManager>(); // get game manager from instanced scene (dont destroy on load)
-        }
-
-        if (gameManager != null)
-        {
-            dialogueManager = gameManager.dialogueManager;
-        }
-        
-        if (dialogueManager == null)
-        {
-            dialogueManager = FindObjectOfType<DialogueManager>();
-        }
+        gameManager = GameManager.Instance ?? FindObjectOfType<GameManager>();
+        dialogueManager = gameManager?.dialogueManager ?? FindObjectOfType<DialogueManager>();
+        questManager = gameManager?.questManager ?? FindObjectOfType<QuestManager>();
     }
-
     
     public void Interact(){
         switch (interactibleType)
@@ -63,37 +56,45 @@ public class Interactible_Controller : MonoBehaviour
     }
     private void Default()
     {
-        Debug.Log($"Interacting with default {gameObject.name}");
+        Debug.Log($"InterController: Interacting with default {gameObject.name}");
     }
     private void PickUp() // add item to player Inventory
     {
         StartCoroutine(gameManager.uiManager.DisplayPickUpText("picked up " + gameObject.name));
-        Debug.Log($"Picking up {gameObject.name}");
+        Debug.Log($"InterController: Picking up {gameObject.name}");
         this.gameObject.SetActive(false); // object disappears
 
-        if (gameObject.name == "shrubbery") { // if the gameobjects is named shrubbery, add it to the inventory
-            gameManager.playerInventory.AddItemToInventory("shrubbery");
-            Debug.Log($"{gameObject.name} added to inventory");
-        }
+        // INVENTORY: Generic pickup to add any item to inventory
+        gameManager.playerInventory.AddItemToInventory(gameObject.name.ToLower());
+        Debug.Log($"InterController: {gameObject.name} added to inventory");
+
+        // !! should first be checking if its a quest item
+        // QUEST: Update quest objective when item is picked up
+        questManager.UpdateQuestObjective(
+            QuestObjective.ObjectiveType.Collect, 
+            gameObject.name
+        );
     }
 
     // Info next to player's head, for inner thoughts in info on objects
     void Info()
     {
-        Debug.Log($"displaying info text");
+        Debug.Log($"InterController: displaying info text");
         StartCoroutine(gameManager.uiManager.DisplayInfoText());
     }
 
     private void Dialogue()
     {
-        bool hasShrubbery = gameManager.playerInventory.CheckInventoryForItem("shrubbery");
-        Debug.Log($"Has Shrubbery: {hasShrubbery}");
-
-        if (hasShrubbery && shrubberyEvent.Length > 0){
-            dialogueManager.StartDialogue(shrubberyEvent); // dialogue if player has event item (shrubbery in this case)
+        foreach (var condition in dialogueConditions) // loop through all the conditions
+        {
+            if (gameManager.playerInventory.CheckInventoryForItem(condition.requiredItemName)) // check if player has the item
+            {
+                // DIALOGUE: If item is found, start dialogue for this condition
+                dialogueManager.StartDialogue(condition.conditionalDialogue);
+                return;
+            }
         }
-        else{
-            dialogueManager.StartDialogue(sentences); // (NormalControl dialogue on this object)
-        }
+        // DIALOGUE: If no conditions are met, start default dialogue
+        dialogueManager.StartDialogue(defaultDialogue);
     }
 }
